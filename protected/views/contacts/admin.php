@@ -50,7 +50,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'number',
 		array(
 			'name'=>'fk_groups',
-			'value'=>'isset($data->fk_groups->name)? $data->fk_groups->name : "fk_groups"',
+			'value'=>'isset($data->fkGroups->name)? $data->fkGroups->name : ""',
 		),
 		array(
 			'class'=>'CButtonColumn',
