@@ -63,7 +63,7 @@ class ContactsController extends Controller
 	public function actionCreate()
 	{
 		$model=new Contacts;
-		$model->id_user = Yii::app()->user->id;
+		$model->fk_user = Yii::app()->user->id;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);

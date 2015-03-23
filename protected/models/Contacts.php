@@ -7,7 +7,7 @@
  * @property integer $id
  * @property string $name
  * @property string $number
- * @property string $id_user
+ * @property string $fk_user
  * @property string $fk_groups
  *
  * The followings are the available model relations:
@@ -32,13 +32,13 @@ class Contacts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, number, id_user', 'required'),
+			array('name, number, fk_user', 'required'),
 			array('name', 'length', 'max'=>30),
 			array('number', 'length', 'max'=>8),
-			array('id_user, fk_groups', 'length', 'max'=>20),
+			array('fk_user, fk_groups', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, number, id_user, fk_groups', 'safe', 'on'=>'search'),
+			array('id, name, number, fk_user, fk_groups', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,7 +51,7 @@ class Contacts extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'fkGroups' => array(self::BELONGS_TO, 'Groups', 'fk_groups'),
-			'idUser' => array(self::BELONGS_TO, 'UsergroupsUser', 'id_user'),
+			'fkUser' => array(self::BELONGS_TO, 'UsergroupsUser', 'fk_user'),
 		);
 	}
 
@@ -64,7 +64,7 @@ class Contacts extends CActiveRecord
 			'id' => 'ID',
 			'name' => 'Name',
 			'number' => 'Number',
-			'id_user' => 'Id User',
+			'fk_user' => 'Fk User',
 			'fk_groups' => 'Fk Groups',
 		);
 	}
@@ -88,7 +88,7 @@ class Contacts extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		
-		$criteria->addCondition('id_user='. Yii::app()->user->id);
+		$criteria->addCondition('fk_user='. Yii::app()->user->id);
 			
 
 		return new CActiveDataProvider($this, array(
