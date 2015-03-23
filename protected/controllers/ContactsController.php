@@ -64,6 +64,7 @@ class ContactsController extends Controller
 	{
 		$model=new Contacts;
 		$model->fk_user = Yii::app()->user->id;
+		$model->fk_groups = Yii::app()->user->id;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);

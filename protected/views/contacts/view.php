@@ -18,11 +18,21 @@ $this->menu=array(
 
 <h1>View Contacts #<?php echo $model->id; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'name',
-		'number',
+<?php 
+	$find = $model->find(array(
+		'condition'=>'id=:id',
+		'params'=>array(':id'=>$_GET['id']),
+		));
+
+	$this->widget('zii.widgets.CDetailView', array(
+		'data'=>$model,
+		'attributes'=>array(
+			'id',
+			'name',
+			'number',
+			array(
+				'label'=>'Group',
+				'value'=>$find->fk_groups,
+			),
 	),
 )); ?>
