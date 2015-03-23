@@ -33,7 +33,7 @@
 
 	<?php
 		$models = Groups::model()->findAll(array('order'=>'name'));
-		echo CHtml::dropDownList('Groups', 'Groups[id]', CHtml::listData($models, 'id', 'name'), array('empty'=>'(Select a group)'));
+		echo CHtml::dropDownList('Groups', 'Contacts[fk_groups]', CHtml::listData($models, 'id', 'name'), array('empty'=>'(Select a group)'));
 	?>
 
 	<div class="row buttons">

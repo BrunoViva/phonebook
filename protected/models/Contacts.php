@@ -11,8 +11,8 @@
  * @property string $fk_groups
  *
  * The followings are the available model relations:
+ * @property UsergroupsUser $fkUser
  * @property Groups $fkGroups
- * @property UsergroupsUser $idUser
  */
 class Contacts extends CActiveRecord
 {
@@ -50,8 +50,8 @@ class Contacts extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'fkGroups' => array(self::BELONGS_TO, 'Groups', 'fk_groups'),
 			'fkUser' => array(self::BELONGS_TO, 'UsergroupsUser', 'fk_user'),
+			'fkGroups' => array(self::BELONGS_TO, 'Groups', 'fk_groups'),
 		);
 	}
 
@@ -87,9 +87,7 @@ class Contacts extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		
 		$criteria->addCondition('fk_user='. Yii::app()->user->id);
-			
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

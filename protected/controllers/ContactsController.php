@@ -64,7 +64,6 @@ class ContactsController extends Controller
 	{
 		$model=new Contacts;
 		$model->fk_user = Yii::app()->user->id;
-		$model->fk_groups = Yii::app()->user->id;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -72,6 +71,7 @@ class ContactsController extends Controller
 		if(isset($_POST['Contacts']))
 		{
 			$model->attributes=$_POST['Contacts'];
+			$model->fk_groups=$_POST['Groups'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -96,6 +96,7 @@ class ContactsController extends Controller
 		if(isset($_POST['Contacts']))
 		{
 			$model->attributes=$_POST['Contacts'];
+			$model->fk_groups=$_POST['Groups'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
