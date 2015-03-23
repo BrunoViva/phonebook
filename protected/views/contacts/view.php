@@ -22,7 +22,7 @@ $this->menu=array(
 	$find = $model->find(array(
 		'condition'=>'id=:id',
 		'params'=>array(':id'=>$_GET['id']),
-		));
+	));
 
 	$this->widget('zii.widgets.CDetailView', array(
 		'data'=>$model,
@@ -32,7 +32,7 @@ $this->menu=array(
 			'number',
 			array(
 				'label'=>'Group',
-				'value'=>$find->fk_groups,
+				'value'=>$find->fkGroups->name,
 			),
 	),
 )); ?>
