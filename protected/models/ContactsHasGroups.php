@@ -1,28 +1,26 @@
 <?php
 
 /**
- * This is the model class for table "contacts".
+ * This is the model class for table "contacts_has_groups".
  *
- * The followings are the available columns in table 'contacts':
- * @property string $id
- * @property string $name
- * @property string $number
- * @property string $fk_user
+ * The followings are the available columns in table 'contacts_has_groups':
+ * @property string $id_contacts
+ * @property string $id_groups
+ * @property string $fk_contacts
  * @property string $fk_groups
  *
  * The followings are the available model relations:
- * @property UsergroupsUser $fkUser
+ * @property Contacts $fkContacts
  * @property Groups $fkGroups
- * @property ContactsHasGroups[] $contactsHasGroups
  */
-class Contacts extends CActiveRecord
+class ContactsHasGroups extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'contacts';
+		return 'contacts_has_groups';
 	}
 
 	/**
@@ -33,13 +31,10 @@ class Contacts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, number, fk_user', 'required'),
-			array('name', 'length', 'max'=>30),
-			array('number', 'length', 'max'=>8),
-			array('fk_user, fk_groups', 'length', 'max'=>20),
+			array('id_contacts, id_groups, fk_contacts, fk_groups', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, number, fk_user, fk_groups', 'safe', 'on'=>'search'),
+			array('id_contacts, id_groups, fk_contacts, fk_groups', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,9 +46,8 @@ class Contacts extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'fkUser' => array(self::BELONGS_TO, 'UsergroupsUser', 'fk_user'),
+			'fkContacts' => array(self::BELONGS_TO, 'Contacts', 'fk_contacts'),
 			'fkGroups' => array(self::BELONGS_TO, 'Groups', 'fk_groups'),
-			'contactsHasGroups' => array(self::HAS_MANY, 'ContactsHasGroups', 'fk_contacts'),
 		);
 	}
 
@@ -63,10 +57,9 @@ class Contacts extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'number' => 'Number',
-			'fk_user' => 'Fk User',
+			'id_contacts' => 'Id Contacts',
+			'id_groups' => 'Id Groups',
+			'fk_contacts' => 'Fk Contacts',
 			'fk_groups' => 'Fk Groups',
 		);
 	}
@@ -89,7 +82,10 @@ class Contacts extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->addCondition('fk_user='. Yii::app()->user->id);
+		$criteria->compare('id_contacts',$this->id_contacts,true);
+		$criteria->compare('id_groups',$this->id_groups,true);
+		$criteria->compare('fk_contacts',$this->fk_contacts,true);
+		$criteria->compare('fk_groups',$this->fk_groups,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -100,7 +96,7 @@ class Contacts extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Contacts the static model class
+	 * @return ContactsHasGroups the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
