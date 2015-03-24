@@ -4,14 +4,13 @@
  * This is the model class for table "contacts_has_groups".
  *
  * The followings are the available columns in table 'contacts_has_groups':
- * @property string $id_contacts
- * @property string $id_groups
+ * @property string $id
  * @property string $fk_contacts
  * @property string $fk_groups
  *
  * The followings are the available model relations:
- * @property Contacts $fkContacts
  * @property Groups $fkGroups
+ * @property Contacts $fkContacts
  */
 class ContactsHasGroups extends CActiveRecord
 {
@@ -31,10 +30,10 @@ class ContactsHasGroups extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_contacts, id_groups, fk_contacts, fk_groups', 'length', 'max'=>20),
+			array('fk_contacts, fk_groups', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_contacts, id_groups, fk_contacts, fk_groups', 'safe', 'on'=>'search'),
+			array('id, fk_contacts, fk_groups', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -46,8 +45,8 @@ class ContactsHasGroups extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'fkContacts' => array(self::BELONGS_TO, 'Contacts', 'fk_contacts'),
-			'fkGroups' => array(self::BELONGS_TO, 'Groups', 'fk_groups'),
+			'fkGroups' => array(self::HAS_MANY, 'Groups', 'fk_groups'),
+			'fkContacts' => array(self::HAS_MANY, 'Contacts', 'fk_contacts'),
 		);
 	}
 
@@ -57,8 +56,7 @@ class ContactsHasGroups extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_contacts' => 'Id Contacts',
-			'id_groups' => 'Id Groups',
+			'id' => 'ID',
 			'fk_contacts' => 'Fk Contacts',
 			'fk_groups' => 'Fk Groups',
 		);
@@ -82,8 +80,7 @@ class ContactsHasGroups extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_contacts',$this->id_contacts,true);
-		$criteria->compare('id_groups',$this->id_groups,true);
+		$criteria->compare('id',$this->id,true);
 		$criteria->compare('fk_contacts',$this->fk_contacts,true);
 		$criteria->compare('fk_groups',$this->fk_groups,true);
 

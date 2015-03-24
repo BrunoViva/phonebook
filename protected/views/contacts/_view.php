@@ -17,8 +17,8 @@
 		<?php echo CHtml::encode($data->number); ?>
 		<br />
 
-		<b><?php echo CHtml::encode($data->getAttributeLabel('fk_groups')); ?>:</b>
-		<?php echo CHtml::encode($data->fk_groups); ?>
+		<b><?php echo 'Groups'; ?>:</b>
+		<?php echo array('label'=>'Groups',	'value'=>$relation); ?>
 		<br />
 
 	</div>

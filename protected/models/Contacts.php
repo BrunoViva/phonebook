@@ -8,11 +8,9 @@
  * @property string $name
  * @property string $number
  * @property string $fk_user
- * @property string $fk_groups
  *
  * The followings are the available model relations:
  * @property UsergroupsUser $fkUser
- * @property Groups $fkGroups
  * @property ContactsHasGroups[] $contactsHasGroups
  */
 class Contacts extends CActiveRecord
@@ -36,10 +34,10 @@ class Contacts extends CActiveRecord
 			array('name, number, fk_user', 'required'),
 			array('name', 'length', 'max'=>30),
 			array('number', 'length', 'max'=>8),
-			array('fk_user, fk_groups', 'length', 'max'=>20),
+			array('fk_user', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, number, fk_user, fk_groups', 'safe', 'on'=>'search'),
+			array('id, name, number, fk_user', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,7 +50,6 @@ class Contacts extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'fkUser' => array(self::BELONGS_TO, 'UsergroupsUser', 'fk_user'),
-			'fkGroups' => array(self::BELONGS_TO, 'Groups', 'fk_groups'),
 			'contactsHasGroups' => array(self::HAS_MANY, 'ContactsHasGroups', 'fk_contacts'),
 		);
 	}
@@ -67,7 +64,6 @@ class Contacts extends CActiveRecord
 			'name' => 'Name',
 			'number' => 'Number',
 			'fk_user' => 'Fk User',
-			'fk_groups' => 'Fk Groups',
 		);
 	}
 
@@ -105,5 +101,12 @@ class Contacts extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public static function getGroups($id_pnumber) {
+		$sql = 'SELECT g.name FROM (contacts c JOIN contacts_has_groups h ON c.id = h.fk_contacts) JOIN groups g ON g.id = h.fk_groups WHERE c.id = :id_pnumber';
+		$command = Yii::app()->getDb()->createCommand($sql);
+		$command->bindParam(":id_pnumber", $id_pnumber, PDO::PARAM_INT);
+		return $command->queryAll();
 	}
 }

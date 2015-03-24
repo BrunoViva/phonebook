@@ -31,8 +31,8 @@ $this->menu=array(
 			'name',
 			'number',
 			array(
-				'label'=>'Group',
-				'value'=>$find->fkGroups->name,
+				'label'=>'Groups',
+				'value'=>$relation,
 			),
 	),
 )); ?>

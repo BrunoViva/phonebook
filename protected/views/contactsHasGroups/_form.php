@@ -1,13 +1,13 @@
 <?php
-/* @var $this ContactsController */
-/* @var $model Contacts */
+/* @var $this ContactsHasGroupsController */
+/* @var $model ContactsHasGroups */
 /* @var $form CActiveForm */
 ?>
 
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'contacts-form',
+	'id'=>'contacts-has-groups-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
 	// There is a call to performAjaxValidation() commented in generated controller code.
@@ -20,21 +20,16 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'name'); ?>
-		<?php echo $form->textField($model,'name',array('size'=>50,'maxlength'=>50)); ?>
-		<?php echo $form->error($model,'name'); ?>
+		<?php echo $form->labelEx($model,'fk_contacts'); ?>
+		<?php echo $form->textField($model,'fk_contacts',array('size'=>20,'maxlength'=>20)); ?>
+		<?php echo $form->error($model,'fk_contacts'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'number'); ?>
-		<?php echo $form->textField($model,'number',array('size'=>8,'maxlength'=>8)); ?>
-		<?php echo $form->error($model,'number'); ?>
+		<?php echo $form->labelEx($model,'fk_groups'); ?>
+		<?php echo $form->textField($model,'fk_groups',array('size'=>20,'maxlength'=>20)); ?>
+		<?php echo $form->error($model,'fk_groups'); ?>
 	</div>
-
-	<?php
-		$models = Groups::model()->findAll(array('order'=>'name'));
-		echo CHtml::dropDownList('Groups', 'ContactsHasGroups[fk_groups]', CHtml::listData($models, 'id', 'name'), array('empty'=>'(Select a group)', 'multiple'=>'multiple'));
-	?>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

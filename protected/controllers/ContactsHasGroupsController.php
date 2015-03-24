@@ -1,6 +1,6 @@
 <?php
 
-class ContactsController extends Controller
+class ContactsHasGroupsController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -29,7 +29,7 @@ class ContactsController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-				'users'=>array('@'),
+				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
@@ -37,7 +37,7 @@ class ContactsController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -51,14 +51,8 @@ class ContactsController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$relation=Contacts::getGroups($id);
-		$print='';
-		foreach ($relation as $value) {
-			$print.=$value['name'].' ';
-		}
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
-			'relation'=>$print,
 		));
 	}
 
@@ -68,24 +62,16 @@ class ContactsController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Contacts;
+		$model=new ContactsHasGroups;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Contacts']))
+		if(isset($_POST['ContactsHasGroups']))
 		{
-			$model->attributes=$_POST['Contacts'];
-			$model->fk_user = Yii::app()->user->id;
-			if($model->save()) {
-				foreach ($_POST['Groups'] as $groups) {
-					$relation=new ContactsHasGroups;
-					$relation->fk_contacts=$model->id;
-					$relation->fk_groups=$groups;
-					$relation->save();
-				}
+			$model->attributes=$_POST['ContactsHasGroups'];
+			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
-			}
 		}
 
 		$this->render('create',array(
@@ -105,10 +91,9 @@ class ContactsController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Contacts']))
+		if(isset($_POST['ContactsHasGroups']))
 		{
-			$model->attributes=$_POST['Contacts'];
-			$model->fk_groups=$_POST['Groups'];
+			$model->attributes=$_POST['ContactsHasGroups'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -137,16 +122,9 @@ class ContactsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$id=Yii::app()->user->id;
-		$relation=Contacts::getGroups($id);
-		$print='';
-		foreach ($relation as $value) {
-			$print.=$value['name'].' ';
-		}
-		$dataProvider=new Contacts();
+		$dataProvider=new CActiveDataProvider('ContactsHasGroups');
 		$this->render('index',array(
-			'model'=>$dataProvider,
-			'relation'=>$print,
+			'dataProvider'=>$dataProvider,
 		));
 	}
 
@@ -155,10 +133,10 @@ class ContactsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Contacts('search');
+		$model=new ContactsHasGroups('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Contacts']))
-			$model->attributes=$_GET['Contacts'];
+		if(isset($_GET['ContactsHasGroups']))
+			$model->attributes=$_GET['ContactsHasGroups'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -169,12 +147,12 @@ class ContactsController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Contacts the loaded model
+	 * @return ContactsHasGroups the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Contacts::model()->findByPk($id);
+		$model=ContactsHasGroups::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -182,11 +160,11 @@ class ContactsController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Contacts $model the model to be validated
+	 * @param ContactsHasGroups $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='contacts-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='contacts-has-groups-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
