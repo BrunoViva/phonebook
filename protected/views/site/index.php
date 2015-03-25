@@ -9,9 +9,10 @@ $this->pageTitle=Yii::app()->name;
 <p>A simple Web Application that provides a storage for names and related numbers.</p>
 
 <?php
+d(Yii::app()->request->url);
 	if (Yii::app()->request->url == '/phonebook/index.php') {
 		echo CHtml::link('Access', 'index.php/contacts');
 	} else {
-		echo CHtml::link('Access', '../contacts');
+		echo CHtml::link('Access', '/phonebook/index.php/contacts');
 	}
 ?>
