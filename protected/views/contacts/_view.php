@@ -2,7 +2,7 @@
 /* @var $this ContactsController */
 /* @var $data Contacts */
 ?>
-<a href="<?php echo CHtml::encode($data->id); ?>">
+<!-- <a href="<?php echo CHtml::encode($data->id); ?>"> -->
 	<div class="view">
 
 		<!-- <b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
@@ -17,9 +17,15 @@
 		<?php echo CHtml::encode($data->number); ?>
 		<br />
 
-		<b><?php echo 'Groups'; ?>:</b>
-		<?php echo array('label'=>'Groups',	'value'=>$relation); ?>
-		<br />
+		<?php 
+			$id=CHtml::encode($data->id);
+			$relation=Contacts::getGroups($id);
+			$print='';
+			foreach ($relation as $value) {
+				$print.=$value['name'].' ';
+			}
+			echo $print;
+		?>
 
 	</div>
 </a>

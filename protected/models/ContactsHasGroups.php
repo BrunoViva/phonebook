@@ -80,9 +80,9 @@ class ContactsHasGroups extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('fk_contacts',$this->fk_contacts,true);
-		$criteria->compare('fk_groups',$this->fk_groups,true);
+		// $criteria->compare('id',$this->id,true);
+		// $criteria->compare('fk_contacts',$this->fk_contacts,true);
+		// $criteria->compare('fk_groups',$this->fk_groups,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
