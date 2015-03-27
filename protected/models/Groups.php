@@ -77,8 +77,7 @@ class Groups extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('name',$this->name,true);
+		$criteria->addCondition('owner='. Yii::app()->user->id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -95,4 +94,5 @@ class Groups extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
 }

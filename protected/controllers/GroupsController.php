@@ -14,8 +14,7 @@ class GroupsController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+			'userGroupsAccessControl',
 		);
 	}
 
@@ -33,11 +32,11 @@ class GroupsController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('admin'),
+				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -70,6 +69,7 @@ class GroupsController extends Controller
 		if(isset($_POST['Groups']))
 		{
 			$model->attributes=$_POST['Groups'];
+			$model->owner=Yii::app()->user->id;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,9 +122,9 @@ class GroupsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Groups');
+		$dataProvider=new Groups();
 		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+			'model'=>$dataProvider,
 		));
 	}
 

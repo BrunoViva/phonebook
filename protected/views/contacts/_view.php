@@ -2,7 +2,7 @@
 /* @var $this ContactsController */
 /* @var $data Contacts */
 ?>
-<!-- <a href="<?php echo CHtml::encode($data->id); ?>"> -->
+<a href="<?php echo CHtml::encode($data->id); ?>">
 	<div class="view">
 
 		<!-- <b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>

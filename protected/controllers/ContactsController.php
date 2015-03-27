@@ -14,8 +14,7 @@ class ContactsController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+			'userGroupsAccessControl', 
 		);
 	}
 
@@ -51,10 +50,10 @@ class ContactsController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$relation=Contacts::getGroups($id);
+		$relation=ContactsHasGroups::model()->getGroups($id);
 		$print='';
 		foreach ($relation as $value) {
-			$print.=$value['name'].' ';
+			$print.= $value->nameGroup.' ';
 		}
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
@@ -75,16 +74,21 @@ class ContactsController extends Controller
 
 		if(isset($_POST['Contacts']))
 		{
-			$model->attributes=$_POST['Contacts'];
-			$model->fk_user = Yii::app()->user->id;
-			if($model->save()) {
-				foreach ($_POST['Groups'] as $groups) {
-					$relation=new ContactsHasGroups;
-					$relation->fk_contacts=$model->id;
-					$relation->fk_groups=$groups;
-					$relation->save();
+			if(isset($_POST['Groups']) && $_POST['Groups']!==null){
+				$model->attributes=$_POST['Contacts'];
+				$model->fk_user = Yii::app()->user->id;
+				if($model->save()) {
+					foreach ($_POST['Groups'] as $groups) {
+						$relation=new ContactsHasGroups;
+						$relation->fk_contacts=$model->id;
+						$relation->fk_groups=$groups;
+						$relation->save();
+					}
+					$this->redirect(array('view','id'=>$model->id));
 				}
-				$this->redirect(array('view','id'=>$model->id));
+			} else {
+				Yii::app()->user->setFlash('notice', "Choose the group(s)!");
+				$this->redirect(array('create'));
 			}
 		}
 
@@ -104,17 +108,39 @@ class ContactsController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+		$groups=ContactsHasGroups::model()->findAll(array(
+			'condition'=>'fk_contacts=:id_contact',
+			'params'=>array(':id_contact'=>$model->id),
+			'order'=>'id',
+		));
+		
+
+		$groups_update=array();
+		foreach ($groups as $group) {
+			$groups_update[] = $group->fk_groups;
+		}
 
 		if(isset($_POST['Contacts']))
 		{
 			$model->attributes=$_POST['Contacts'];
-			$model->fk_groups=$_POST['Groups'];
-			if($model->save())
+			ContactsHasGroups::model()->deleteAll('fk_contacts=' . $model->id);
+			if ($model->save() && isset($_POST['Groups']) && $_POST['Groups']!==null) {
+				foreach ($_POST['Groups'] as $group) {
+					$relation=new ContactsHasGroups;
+					$relation->fk_contacts=$model->id;
+					$relation->fk_groups=$group;
+					$relation->save();
+				}
 				$this->redirect(array('view','id'=>$model->id));
+			} else {
+				Yii::app()->user->setFlash('notice', "Choose the group(s)!");
+				$this->redirect(array('update','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+			'groups'=>$groups_update,
 		));
 	}
 

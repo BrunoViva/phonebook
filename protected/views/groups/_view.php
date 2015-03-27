@@ -2,16 +2,13 @@
 /* @var $this GroupsController */
 /* @var $data Groups */
 ?>
+<a href="<?php echo CHtml::encode($data->id); ?>">
+	<div class="view">
 
-<div class="view">
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
-	<?php echo CHtml::encode($data->name); ?>
-	<br />
+		<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
+		<?php echo CHtml::encode($data->name); ?>
+		<br />
 
 
-</div>
+	</div>
+</a>

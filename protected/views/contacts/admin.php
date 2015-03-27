@@ -48,10 +48,6 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id',
 		'name',
 		'number',
-		// array(
-		// 	'name'=>'fk_groups',
-		// 	'value'=>'isset($data->fkGroups->name)? $data->fkGroups->name : "No Group"',
-		// ),
 		array(
 			'class'=>'CButtonColumn',
 		),

@@ -14,6 +14,8 @@
  */
 class ContactsHasGroups extends CActiveRecord
 {
+
+	public $nameGroup;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -30,6 +32,7 @@ class ContactsHasGroups extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('fk_contacts, fk_groups', 'required'),
 			array('fk_contacts, fk_groups', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -87,6 +90,15 @@ class ContactsHasGroups extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function getGroups($id_pnumber) {
+
+		$criteria = new CDbCriteria();
+		$criteria->select = 'groups.name as nameGroup';
+		$criteria->join = 'JOIN groups ON groups.id = t.fk_groups';
+		$criteria->condition = "t.fk_contacts=". $id_pnumber;
+		return $this->findAll($criteria);
 	}
 
 	/**

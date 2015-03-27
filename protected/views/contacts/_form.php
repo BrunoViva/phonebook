@@ -32,8 +32,16 @@
 	</div>
 
 	<?php
-		$models = Groups::model()->findAll(array('order'=>'name'));
-		echo CHtml::dropDownList('Groups', 'ContactsHasGroups[fk_groups]', CHtml::listData($models, 'id', 'name'), array('empty'=>'(Select a group)', 'multiple'=>'multiple'));
+	    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+	        echo '<div class="flash-' . $key . '">' . $message . "</div>\n";
+	    }
+
+		if (!isset($groups)) {
+			$groups = Groups::model()->findAll(array('order'=>'name'));
+			echo CHtml::dropDownList('Groups', 'ContactsHasGroups[fk_groups]', CHtml::listData(Groups::model()->findAll(array('condition'=>'owner='. Yii::app()->user->id)), 'id', 'name'), array('empty'=>'(Select a group)', 'multiple'=>'multiple'));
+		} else {
+			echo CHtml::dropDownList('Groups', $groups, CHtml::listData(Groups::model()->findAll(array('condition'=>'owner='. Yii::app()->user->id)), 'id', 'name'), array('empty'=>'(Select a group)', 'multiple'=>'multiple'));
+		}
 	?>
 
 	<div class="row buttons">

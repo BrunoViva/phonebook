@@ -33,7 +33,8 @@ class Contacts extends CActiveRecord
 		return array(
 			array('name, number, fk_user', 'required'),
 			array('name', 'length', 'max'=>30),
-			array('number', 'length', 'max'=>8),
+			array('number', 'length', 'min'=>8, 'max'=>8),
+			array('number', 'numerical'),
 			array('fk_user', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
